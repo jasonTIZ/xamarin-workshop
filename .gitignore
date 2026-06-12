@@ -1,0 +1,59 @@
+# Archivos de compilación
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+[Bb]uild/
+
+# Visual Studio
+.vs/
+*.user
+*.userosscache
+*.suo
+*.userprefs
+*.sln.docstates
+
+# Visual Studio Code
+.vscode/
+
+# Rider / JetBrains
+.idea/
+
+# Resultados de pruebas
+[Tt]est[Rr]esult*/
+*.trx
+
+# NuGet
+*.nupkg
+*.snupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+project.lock.json
+project.fragment.lock.json
+
+# Xamarin
+*.apk
+*.aab
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Android
+*.keystore
+!debug.keystore
+
+# Archivos generados por el sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs y temporales
+*.log
+*.tmp
+*.temp
+*.cache
+*.bak
+
+# ReSharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
