@@ -37,10 +37,18 @@ project.fragment.lock.json
 *.ipa
 *.dSYM.zip
 *.dSYM
+Components/
+*.userprefs
 
 # Android
 *.keystore
 !debug.keystore
+
+# iOS / Xcode
+xcuserdata/
+*.xcuserstate
+*.mtouch
+[Pp]ackages.config.lock
 
 # Archivos generados por el sistema operativo
 .DS_Store
