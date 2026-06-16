@@ -21,7 +21,7 @@ Necesitás tener instalado en tu computadora:
 
 ### Para Linux (Debian/Ubuntu/Arch y derivados)
 
-- **.NET 8.0 SDK** (para ejecutar el API)
+- **.NET 9.0 SDK** (para ejecutar el API)
 - **Docker** (para compilar la app Xamarin)
 - **Android SDK Platform Tools** (`adb`, para instalar en dispositivo físico)
 - **Un celular Android** con modo desarrollador y depuración USB activados
@@ -79,12 +79,12 @@ Una vez instalado Visual Studio:
 
 ### 1.2 Linux — Instalación de requisitos
 
-#### 1.2.1 Instalar .NET 8.0 SDK
+#### 1.2.1 Instalar .NET 9.0 SDK
 
 **Debian/Ubuntu:**
 ```bash
 sudo apt update
-sudo apt install -y dotnet-sdk-8.0
+sudo apt install -y dotnet-sdk-9.0
 ```
 
 **Arch Linux:**
@@ -95,7 +95,7 @@ sudo pacman -S dotnet-sdk
 Verificá la instalación:
 ```bash
 dotnet --version
-# Debería mostrar: 8.0.x
+# Debería mostrar: 9.0.x
 ```
 
 #### 1.2.2 Instalar Docker
@@ -191,6 +191,11 @@ Una vez clonado:
 ```bash
 git clone git@github.com:jasonTIZ/xamarin-workshop.git
 cd xamarin-workshop
+```
+
+Dále permisos de ejecución a los scripts:
+```bash
+chmod +x run-api.sh build-android.sh
 ```
 
 Iniciá el API para verificar que todo funciona:
