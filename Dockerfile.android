@@ -3,7 +3,10 @@ FROM tafilz/xamarin-android:33-latest
 RUN apt-get update -oAcquire::AllowInsecureRepositories=true && \
     apt-get install -y --no-install-recommends --allow-unauthenticated \
         nuget \
-        android-sdk-platform-tools \
     && rm -rf /var/lib/apt/lists/*
+
+# La imagen solo trae android-33 pero el tooling de Xamarin (16.10.1) llega hasta v12.1 (API 32).
+# Exponemos android-33 como android-32 para que Xamarin pueda encontrar el android.jar.
+RUN cp -r /usr/lib/android-sdk/platforms/android-33 /usr/lib/android-sdk/platforms/android-32
 
 WORKDIR /workspace

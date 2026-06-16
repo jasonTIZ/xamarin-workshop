@@ -290,7 +290,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
-using System.Text.Json;
+using Newtonsoft.Json;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -356,8 +356,7 @@ namespace MedicalTasks.ViewModels
                 var client = new HttpClient();
                 var json = await client.GetStringAsync($"{ApiBaseUrl}/tasks");
 
-                Tasks = JsonSerializer.Deserialize<ObservableCollection<MedicalTask>>(json,
-                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                Tasks = JsonConvert.DeserializeObject<ObservableCollection<MedicalTask>>(json);
             }
             catch (HttpRequestException)
             {
@@ -378,9 +377,11 @@ namespace MedicalTasks.ViewModels
             try
             {
                 var client = new HttpClient();
-                var response = await client.PatchAsync(
-                    $"{ApiBaseUrl}/tasks/{task.Id}/complete",
-                    new StringContent(""));
+                var request = new HttpRequestMessage(new HttpMethod("PATCH"), $"{ApiBaseUrl}/tasks/{task.Id}/complete")
+                {
+                    Content = new StringContent("")
+                };
+                var response = await client.SendAsync(request);
 
                 if (response.IsSuccessStatusCode)
                     await LoadTasksAsync();
@@ -758,6 +759,20 @@ Contenido del archivo (el mismo para Windows y Linux — incluye las IPs de ambo
 
 > Incluimos ambas IPs para que el mismo XML funcione en Windows (emulador usa `10.0.2.2`) y Linux (dispositivo físico usa `127.0.0.1` via `adb reverse`).
 
+**Solo Linux — registrar el archivo en el proyecto:**
+
+En proyectos Xamarin de estilo antiguo, los archivos creados desde la terminal no se agregan solos al `.csproj`. Visual Studio en Windows lo hace automáticamente, pero en Linux hay que hacerlo a mano. Abrir `MedicalTasks/MedicalTasks.Android/MedicalTasks.Android.csproj` y agregar esta línea dentro del `<ItemGroup>` que ya tiene otros `<AndroidResource>`:
+
+```xml
+<AndroidResource Include="Resources\xml\network_security_config.xml" />
+```
+
+Debe quedar junto a las otras entradas de recursos, por ejemplo:
+```xml
+<AndroidResource Include="Resources\drawable\icon_feed.png" />
+<AndroidResource Include="Resources\xml\network_security_config.xml" />  <!-- ← agregar -->
+```
+
 Luego abrir nuevamente `AndroidManifest.xml` y dentro del tag `<application>` agregar:
 ```xml
 android:networkSecurityConfig="@xml/network_security_config"
@@ -877,6 +892,9 @@ Dispara el evento `PropertyChanged` que la View está escuchando. Cuando Xamarin
 
 **¿Puedo usar VS Code en Linux para editar los archivos?**  
 Sí. Desde la raíz del proyecto ejecutá `code .` para abrirlo. Los archivos `.cs` y `.xaml` se editan normalmente. La compilación y el deploy se hacen siempre con `./build-android.sh`.
+
+**VS Code me muestra errores rojos como "Predefined type 'System.Void' is not defined" en los archivos `.cs`. ¿Qué hago?**  
+Ignoralos — son falsos positivos. El analizador de C# de VS Code (OmniSharp) no entiende proyectos Xamarin.Forms con `netstandard2.0` y marca todo como error aunque el código esté bien. La compilación real la hace MSBuild dentro del contenedor Docker y no tiene este problema. Si ves estos errores en VS Code, simplemente continuá escribiendo el código y compilá con `./build-android.sh` para verificar que todo está correcto.
 
 **¿Qué pasa si Docker falla por falta de RAM?**  
 La compilación Xamarin puede requerir hasta 3-4 GB de RAM. Si falla con un error de memoria, cerrá otras aplicaciones y volvé a intentar.
